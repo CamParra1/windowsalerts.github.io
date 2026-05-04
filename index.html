@@ -54,13 +54,13 @@ function animar() {
         velocidadActual = Math.max(1, Math.min(6, velocidadActual));
 
         // 📦 Archivos copiados según velocidad
-        let archivosPorTick = Math.floor(velocidadActual * 32);
+        let archivosPorTick = Math.floor(velocidadActual * 8);
         archivoActual += archivosPorTick;
 
         if (archivoActual > totalArchivos) archivoActual = totalArchivos;
 
         // 🎯 Progreso REAL basado en archivos
-        progreso = (archivoActual / totalArchivos) * 100;
+        progreso = (archivoActual / totalArchivos) * 300;
 
         // ⏱️ Tiempo restante realista
         let archivosRestantes = totalArchivos - archivoActual;

@@ -33,12 +33,19 @@
 </html>
 
 <script>
-let progreso = 10;
+let progreso = 0;
 let totalArchivos = 25343;
 let archivoActual = 0;
 
-let velocidadBase = 2 + Math.random() * 2; // entre 2 y 4 MB/s
+let velocidadBase = 2 + Math.random() * 2;
 let velocidadActual = velocidadBase;
+
+function showFinalMessage() {
+  const message = document.createElement("div");
+  message.className = "final-message";
+  message.innerHTML = "⬇️ Baje el scroll ⬇️";
+  document.body.appendChild(message);
+}
 
 function animar() {
     let estado = document.getElementById("estado");
@@ -49,25 +56,20 @@ function animar() {
 
     if (progreso < 100) {
 
-        // 📈 Variación suave de velocidad
         velocidadActual += (Math.random() - 0.5) * 0.5;
         velocidadActual = Math.max(1, Math.min(6, velocidadActual));
 
-        // 📦 Archivos copiados según velocidad
         let archivosPorTick = Math.floor(velocidadActual * 8);
         archivoActual += archivosPorTick;
 
         if (archivoActual > totalArchivos) archivoActual = totalArchivos;
 
-        // 🎯 Progreso REAL basado en archivos
         progreso = (archivoActual / totalArchivos) * 100;
 
-        // ⏱️ Tiempo restante realista
         let archivosRestantes = totalArchivos - archivoActual;
         let tiempoSegundos = archivosRestantes / (archivosPorTick * (1000 / 80));
         let tiempoMin = Math.max(1, Math.floor(tiempoSegundos / 60));
 
-        // 🧠 Estados más naturales
         if (progreso < 10) estado.innerText = "Inicializando conexión...";
         else if (progreso < 30) estado.innerText = "Conectando con servidor...";
         else if (progreso < 50) estado.innerText = "Autenticando credenciales...";
@@ -75,7 +77,6 @@ function animar() {
         else if (progreso < 95) estado.innerText = "Extrayendo datos sensibles...";
         else estado.innerText = "Finalizando transferencia...";
 
-        // 🎨 Actualizar UI
         barra.style.width = progreso + "%";
         porcentaje.innerText = Math.floor(progreso) + "%";
         contador.innerText = archivoActual.toLocaleString() + " / " + totalArchivos.toLocaleString() + " archivos";
@@ -85,11 +86,13 @@ function animar() {
         setTimeout(animar, 80);
 
     } else {
-        // Asegurar 100% exacto
         barra.style.width = "100%";
         porcentaje.innerText = "100%";
         contador.innerText = totalArchivos.toLocaleString() + " / " + totalArchivos.toLocaleString() + " archivos";
         estado.innerText = "Transferencia completa";
+
+        // ✅ Mostrar mensaje inmediatamente al finalizar
+        showFinalMessage();
 
         // ⏱️ Mostrar alerta después de 1 minuto
         setTimeout(() => {

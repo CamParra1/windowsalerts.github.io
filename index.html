@@ -1,0 +1,83 @@
+
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Simulación de Seguridad</title><style>body {    margin: 0;    overflow: hidden;    font-family: "Segoe UI", Arial;}/* VIDEO */.video-bg {    position: fixed;    width: 100%;    height: 100%;    object-fit: cover;    z-index: -1;    filter: brightness(0.85); /* deja ver mejor el video */}/* VENTANA GRANDE */.copy-box {    position: absolute;    bottom: 60px;    left: 50%;    transform: translateX(-50%);    width: 850px; /* 🔥 más grande */    background: #f2f2f2;    border-radius: 12px;    border: 1px solid #c8c8c8;    box-shadow: 0 15px 40px rgba(0,0,0,0.6);}/* TITULO */.title {    background: #e6e6e6;    padding: 14px 20px;    font-size: 18px;    font-weight: bold;}/* CONTENIDO */.content {    padding: 20px;    font-size: 15px;}/* BARRA */.progress-container {    width: 95%;    height: 22px;    background: #e5e5e5;    margin: 20px auto;    border-radius: 12px;    overflow: hidden;}.progress-bar {    height: 100%;    width: 30%;    background: repeating-linear-gradient(        45deg,        #2ecc71,        #2ecc71 10px,        #6ee7b7 10px,        #6ee7b7 20px    );    animation: mover 1s linear infinite;}@keyframes mover {    from { background-position: 0 0; }    to { background-position: 40px 0; }}/* TEXTO */.status, .percent, .extra {    font-size: 14px;    padding: 0 20px;}.percent {    text-align: right;    font-weight: bold;}/* ALERTA FINAL PHISHING */.final-screen {    position: fixed;    width: 100%;    height: 100%;    background: rgba(0,0,0,0.95);    color: #ff3b3b;    display: none;    justify-content: center;    align-items: center;    flex-direction: column;    text-align: center;    font-size: 32px;    padding: 20px;}.final-screen small {    font-size: 20px;    color: #ffffff;    margin-top: 20px;    max-width: 700px;    line-height: 1.5;}.btn {    margin-top: 25px;    padding: 12px 25px;    background: #0078d4;    color: white;    border: none;    cursor: pointer;    font-size: 16px;}</style></head><body>
+<!-- VIDEO --> <video class="video-bg" autoplay="autoplay" muted="" loop="loop" playsinline="">    <source src="https://sf-production-eu.s3.amazonaws.com/media/teachables/1296/vecteezy_computer-windows-click-to-fix-error-lot-of-tab-opening-virus_43254211-1776115191588.mp4" type="video/mp4" /></video> <!-- SIMULACIÓN -->
+<div class="copy-box">
+<div class="title">Copiando archivos del sistema...</div>
+<div class="content"><span id="contador">248 / 25,343 archivos</span><br />De: Equipo local<br />A: Servidor externo no autorizado</div>
+<div class="progress-container">
+<div class="progress-bar" id="barra"><br /></div>
+</div>
+<div class="status" id="estado">Inicializando...</div>
+<div class="percent" id="porcentaje">30%</div>
+<div class="extra" id="extra">0 MB/s &bull; 3 minutos restantes</div>
+</div>
+<!-- FINAL PHISHING -->
+<div class="final-screen" id="final" style="display: none;">⚠ SIMULACI&Oacute;N DE PHISHING ⚠ <small> Este fue un ejercicio de concientizaci&oacute;n en seguridad.<br /><br />⚠ Un atacante puede simular procesos falsos para generar p&aacute;nico y provocar acciones indebidas.<br /><br /><b>Recomendaciones:</b><br />&bull; No interactuar con mensajes sospechosos<br />&bull; No compartir informaci&oacute;n confidencial<br />&bull; Reportar inmediatamente al &aacute;rea de seguridad </small> <button class="btn" onclick="location.reload()">Cerrar</button></div>
+<script>
+let progreso = 0;
+let totalArchivos = 25343;
+let archivoActual = 0;
+
+let velocidadBase = 2 + Math.random() * 2; // entre 2 y 4 MB/s
+let velocidadActual = velocidadBase;
+
+function animar() {
+    let estado = document.getElementById("estado");
+    let barra = document.getElementById("barra");
+    let porcentaje = document.getElementById("porcentaje");
+    let extra = document.getElementById("extra");
+    let contador = document.getElementById("contador");
+
+    if (progreso < 100) {
+
+        // 📈 Variación suave de velocidad
+        velocidadActual += (Math.random() - 0.5) * 0.2;
+        velocidadActual = Math.max(1, Math.min(6, velocidadActual));
+
+        // 📦 Archivos copiados según velocidad
+        let archivosPorTick = Math.floor(velocidadActual * 8);
+        archivoActual += archivosPorTick;
+
+        if (archivoActual > totalArchivos) archivoActual = totalArchivos;
+
+        // 🎯 Progreso REAL basado en archivos
+        progreso = (archivoActual / totalArchivos) * 100;
+
+        // ⏱️ Tiempo restante realista
+        let archivosRestantes = totalArchivos - archivoActual;
+        let tiempoSegundos = archivosRestantes / (archivosPorTick * (1000 / 80));
+        let tiempoMin = Math.max(1, Math.floor(tiempoSegundos / 60));
+
+        // 🧠 Estados más naturales
+        if (progreso < 10) estado.innerText = "Inicializando conexión...";
+        else if (progreso < 30) estado.innerText = "Conectando con servidor...";
+        else if (progreso < 50) estado.innerText = "Autenticando credenciales...";
+        else if (progreso < 75) estado.innerText = "Copiando archivos del sistema...";
+        else if (progreso < 95) estado.innerText = "Extrayendo datos sensibles...";
+        else estado.innerText = "Finalizando transferencia...";
+
+        // 🎨 Actualizar UI
+        barra.style.width = progreso + "%";
+        porcentaje.innerText = Math.floor(progreso) + "%";
+        contador.innerText = archivoActual.toLocaleString() + " / " + totalArchivos.toLocaleString() + " archivos";
+
+        extra.innerText = velocidadActual.toFixed(1) + " MB/s • " + tiempoMin + " min restantes";
+
+        setTimeout(animar, 80);
+
+    } else {
+        // Asegurar 100% exacto
+        barra.style.width = "100%";
+        porcentaje.innerText = "100%";
+        contador.innerText = totalArchivos.toLocaleString() + " / " + totalArchivos.toLocaleString() + " archivos";
+        estado.innerText = "Transferencia completa";
+
+        // ⏱️ Mostrar alerta después de 1 minuto
+        setTimeout(() => {
+            document.getElementById("final").style.display = "flex";
+        }, 60000);
+    }
+}
+
+animar();
+</script>

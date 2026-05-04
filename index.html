@@ -92,6 +92,15 @@ function animar() {
       document.getElementById("final").style.display = "flex";
     }, 10000); // ⬅️ también lo bajé de 60s a 10s
   }
+  function showFinalMessage(){
+
+  const message = document.createElement("div");
+  message.className = "final-message";
+  message.innerHTML = "⬇️ Baje el scroll ⬇️";
+
+  document.body.appendChild(message);
+
+}
 }
 
 animar();

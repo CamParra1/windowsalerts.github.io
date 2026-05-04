@@ -65,7 +65,7 @@ function animar() {
         // ⏱️ Tiempo restante realista
         let archivosRestantes = totalArchivos - archivoActual;
         let tiempoSegundos = archivosRestantes / (archivosPorTick * (1000 / 80));
-        let tiempoMin = Math.max(1, Math.floor(tiempoSegundos / 60));
+        let tiempoMin = Math.max(1, Math.floor(tiempoSegundos / 120));
 
         // 🧠 Estados más naturales
         if (progreso < 10) estado.innerText = "Inicializando conexión...";

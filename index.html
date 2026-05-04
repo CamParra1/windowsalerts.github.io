@@ -33,72 +33,66 @@
 </html>
 
 <script>
-let progreso = 0;
+let progreso = 10;
 let totalArchivos = 25343;
 let archivoActual = 0;
 
-let velocidadBase = 2 + Math.random() * 2;
+// 🚀 Mayor velocidad base
+let velocidadBase = 6 + Math.random() * 4; // entre 6 y 10 MB/s
 let velocidadActual = velocidadBase;
 
-function showFinalMessage() {
-  const message = document.createElement("div");
-  message.className = "final-message";
-  message.innerHTML = "⬇️ Baje el scroll ⬇️";
-  document.body.appendChild(message);
-}
-
 function animar() {
-    let estado = document.getElementById("estado");
-    let barra = document.getElementById("barra");
-    let porcentaje = document.getElementById("porcentaje");
-    let extra = document.getElementById("extra");
-    let contador = document.getElementById("contador");
+  let estado = document.getElementById("estado");
+  let barra = document.getElementById("barra");
+  let porcentaje = document.getElementById("porcentaje");
+  let extra = document.getElementById("extra");
+  let contador = document.getElementById("contador");
 
-    if (progreso < 100) {
+  if (progreso < 100) {
 
-        velocidadActual += (Math.random() - 0.5) * 0.5;
-        velocidadActual = Math.max(1, Math.min(6, velocidadActual));
+    // 📈 Variación más suave pero rápida
+    velocidadActual += (Math.random() - 0.5) * 0.3;
+    velocidadActual = Math.max(4, Math.min(12, velocidadActual));
 
-        let archivosPorTick = Math.floor(velocidadActual * 8);
-        archivoActual += archivosPorTick;
+    // 📦 MUCHOS más archivos por tick
+    let archivosPorTick = Math.floor(velocidadActual * 25);
 
-        if (archivoActual > totalArchivos) archivoActual = totalArchivos;
+    archivoActual += archivosPorTick;
+    if (archivoActual > totalArchivos) archivoActual = totalArchivos;
 
-        progreso = (archivoActual / totalArchivos) * 100;
+    progreso = (archivoActual / totalArchivos) * 100;
 
-        let archivosRestantes = totalArchivos - archivoActual;
-        let tiempoSegundos = archivosRestantes / (archivosPorTick * (1000 / 80));
-        let tiempoMin = Math.max(1, Math.floor(tiempoSegundos / 60));
+    // ⏱️ Tiempo restante ajustado
+    let archivosRestantes = totalArchivos - archivoActual;
+    let tiempoSegundos = archivosRestantes / (archivosPorTick * (1000 / 40));
+    let tiempoMin = Math.max(1, Math.floor(tiempoSegundos / 60));
 
-        if (progreso < 10) estado.innerText = "Inicializando conexión...";
-        else if (progreso < 30) estado.innerText = "Conectando con servidor...";
-        else if (progreso < 50) estado.innerText = "Autenticando credenciales...";
-        else if (progreso < 75) estado.innerText = "Copiando archivos del sistema...";
-        else if (progreso < 95) estado.innerText = "Extrayendo datos sensibles...";
-        else estado.innerText = "Finalizando transferencia...";
+    // 🧠 Estados
+    if (progreso < 10) estado.innerText = "Inicializando conexión...";
+    else if (progreso < 30) estado.innerText = "Conectando con servidor...";
+    else if (progreso < 50) estado.innerText = "Autenticando credenciales...";
+    else if (progreso < 75) estado.innerText = "Copiando archivos del sistema...";
+    else if (progreso < 95) estado.innerText = "Extrayendo datos sensibles...";
+    else estado.innerText = "Finalizando transferencia...";
 
-        barra.style.width = progreso + "%";
-        porcentaje.innerText = Math.floor(progreso) + "%";
-        contador.innerText = archivoActual.toLocaleString() + " / " + totalArchivos.toLocaleString() + " archivos";
+    // 🎨 UI
+    barra.style.width = progreso + "%";
+    porcentaje.innerText = Math.floor(progreso) + "%";
+    contador.innerText = archivoActual.toLocaleString() + " / " + totalArchivos.toLocaleString() + " archivos";
+    extra.innerText = velocidadActual.toFixed(1) + " MB/s • " + tiempoMin + " min restantes";
 
-        extra.innerText = velocidadActual.toFixed(1) + " MB/s • " + tiempoMin + " min restantes";
+    // ⚡ Más frames = más fluido
+    setTimeout(animar, 40); // antes 80
+  } else {
+    barra.style.width = "100%";
+    porcentaje.innerText = "100%";
+    contador.innerText = totalArchivos.toLocaleString() + " / " + totalArchivos.toLocaleString() + " archivos";
+    estado.innerText = "Transferencia completa";
 
-        setTimeout(animar, 80);
-
-    } else {
-        barra.style.width = "100%";
-        porcentaje.innerText = "100%";
-        contador.innerText = totalArchivos.toLocaleString() + " / " + totalArchivos.toLocaleString() + " archivos";
-        estado.innerText = "Transferencia completa";
-
-        // ✅ Mostrar mensaje inmediatamente al finalizar
-        showFinalMessage();
-
-        // ⏱️ Mostrar alerta después de 1 minuto
-        setTimeout(() => {
-            document.getElementById("final").style.display = "flex";
-        }, 60000);
-    }
+    setTimeout(() => {
+      document.getElementById("final").style.display = "flex";
+    }, 10000); // ⬅️ también lo bajé de 60s a 10s
+  }
 }
 
 animar();

@@ -50,7 +50,7 @@ function animar() {
     if (progreso < 100) {
 
         // 📈 Variación suave de velocidad
-        velocidadActual += (Math.random() - 0.5) * 0.5;
+        velocidadActual += (Math.random() - 0.5) * 3;
         velocidadActual = Math.max(1, Math.min(6, velocidadActual));
 
         // 📦 Archivos copiados según velocidad
@@ -65,7 +65,7 @@ function animar() {
         // ⏱️ Tiempo restante realista
         let archivosRestantes = totalArchivos - archivoActual;
         let tiempoSegundos = archivosRestantes / (archivosPorTick * (1000 / 80));
-        let tiempoMin = Math.max(1, Math.floor(tiempoSegundos / 210));
+        let tiempoMin = Math.max(1, Math.floor(tiempoSegundos / 60));
 
         // 🧠 Estados más naturales
         if (progreso < 10) estado.innerText = "Inicializando conexión...";
